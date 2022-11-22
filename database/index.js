@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+mongoose.connect('mongodb://localhost/fetcher', { useNewUrlParser: true });
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('we\'re connected'));
 
 let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
-  id: Number,
+  id: {
+    type: Number,
+    unique: true
+  },
   owner: {login: String},
   full_name: String,
   size: Number,
@@ -15,10 +15,34 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (/* TODO */) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
-}
+module.exports = {
+  save: (data, callback) => {
+    // TODO: Your code here
+    // This function should save a repo or repos to
+    // the MongoDB
+    Repo.insertMany(data, (err, docs) => {
+      if (err) {
+        console.log('error in save: ', err);
+        callback(err);
+      } else {
+        callback(null, docs);
+      }
+    })
+  },
 
-module.exports.save = save;
+  getTop25: (callback) => {
+    async function run() {
+      try {
+        const cursor = Repo.find().sort({ size: -1 }).limit(3);
+        if ((await cursor.count()) === 0) {
+          callback(true);
+        } else {
+          callback(null, cursor);
+        }
+      } finally {
+        await client.close();
+      }
+    }
+    run().catch((err) => callback(true));
+  }
+}
