@@ -1,4 +1,5 @@
 import React from 'react';
+import Row from './RepoListRows.jsx'
 
 const RepoList = ({ repos }) => {
   return (
@@ -16,15 +17,7 @@ const RepoList = ({ repos }) => {
             <td>size</td>
           </tr>
           {repos.map((repo, index) => {
-            return (
-              <tr>
-                <td>
-                  <a href={repo.url}>{repo.name}</a>
-                </td>
-                <td>{repo.owner}</td>
-                <td>{repo.size}</td>
-              </tr>
-            )
+            return <Row key={index} repo={repo} />
           })}
         </tbody>
       </table>

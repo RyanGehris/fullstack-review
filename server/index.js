@@ -12,15 +12,13 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.post('/repos', function (req, res) {
   getReposByUsername(req.body.username, (err, data) => {
     if (err) {
-      console.log('error in app.post', err)
       res.status(400).send();
     } else {
       save(data, (err, result) => {
         if (err) {
-          console.log('error in app.post', err)
           res.status(400).send();
         } else {
-          res.status(201).send('success')
+          res.status(201).send()
         }
       })
     }
@@ -33,7 +31,6 @@ app.get('/repos', function (req, res) {
       res.status(200).send(response)
     })
     .catch((error) => {
-      console.log(error)
       res.status(400).send()
     })
 });

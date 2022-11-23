@@ -11,23 +11,22 @@ const App = () => {
   useEffect(() => {
     axios.get('/repos')
       .then((result) => {
-        console.log(result.data);
         setRepos(result.data);
       })
       .catch((err) => console.log('error'));
   }, []);
 
   const search = (term) => {
-    console.log(`${term} was searched`);
     axios.post('/repos', {username: term})
       .then(() => {
         return axios.get('/repos')
       })
       .then((response) => {
-        console.log('to be displayed ', response.data)
         setRepos(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert('This user is already in the database')
+      });
   };
 
   return (
