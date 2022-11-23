@@ -16,21 +16,27 @@ let getReposByUsername = (username, callback) => {
 
   axios.get(options.url, options.headers)
     .then((response) => {
-      const dataStore = [];
-      response.data.forEach((dataObj) => {
-        const newDataObj = {};
-        let { id, owner, name, size, url, full_name } = dataObj;
-        newDataObj.id = id;
-        newDataObj.owner = owner.login;
-        newDataObj.name =name;
-        newDataObj.size = size;
-        newDataObj.url = url;
-        newDataObj.full_name = full_name;
-        dataStore.push(newDataObj);
-      });
-      callback(null, dataStore);
+      callback(null, response.data)
     })
     .catch((error) => callback(error));
+
+  // axios.get(options.url, options.headers)
+  //   .then((response) => {
+  //     const dataStore = [];
+  //     response.data.forEach((dataObj) => {
+  //       const newDataObj = {};
+  //       let { id, owner, name, size, html_url, full_name } = dataObj;
+  //       newDataObj.id = id;
+  //       newDataObj.owner = owner;
+  //       newDataObj.name =name;
+  //       newDataObj.size = size;
+  //       newDataObj.url = html_url;
+  //       newDataObj.full_name = full_name;
+  //       dataStore.push(newDataObj);
+  //     });
+  //     callback(null, dataStore);
+  //   })
+  //   .catch((error) => callback(error));
 }
 
 module.exports.getReposByUsername = getReposByUsername;

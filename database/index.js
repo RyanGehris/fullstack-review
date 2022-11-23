@@ -7,19 +7,17 @@ let repoSchema = mongoose.Schema({
     type: Number,
     unique: true
   },
-  owner: {login: String},
+  owner: String,
+  name: String,
   full_name: String,
   size: Number,
-  html_url: String
+  url: String
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
 module.exports = {
   save: (data, callback) => {
-    // TODO: Your code here
-    // This function should save a repo or repos to
-    // the MongoDB
     Repo.insertMany(data, (err, docs) => {
       if (err) {
         console.log('error in save: ', err);
@@ -30,19 +28,7 @@ module.exports = {
     })
   },
 
-  getTop25: (callback) => {
-    async function run() {
-      try {
-        const cursor = Repo.find().sort({ size: -1 }).limit(3);
-        if ((await cursor.count()) === 0) {
-          callback(true);
-        } else {
-          callback(null, cursor);
-        }
-      } finally {
-        await client.close();
-      }
-    }
-    run().catch((err) => callback(true));
+  getTop25: () => {
+    return Repo.find({}).sort({ size: -1 }).limit(25).exec();
   }
 }
